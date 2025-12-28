@@ -4,7 +4,6 @@ import { ethers } from "ethers"
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
 import { useToast } from "@/components/ui/use-toast"
 import { magic, type MagicUser, getDemoUser, addDemoUser } from "@/lib/magic"
-import { DatabaseService } from "@/lib/database"
 import type { User } from "@/lib/supabase"
 
 //For ethereum declaration
@@ -44,37 +43,45 @@ export function WalletProvider({ children }: { children: ReactNode }) {
 
   const isCustodial = walletType === 'magic'
 
-  // Helper function to create/update user in database
+  // Helper function to create/update user in database via API (server-side)
   const syncUserWithDatabase = async (walletAddress: string, userData: {
     email?: string
     phone?: string
     loginMethod: 'magic_email' | 'magic_phone' | 'magic_social' | 'metamask'
   }) => {
-    console.log('🔄 Syncing user with database:', walletAddress, userData)
+    console.log('🔄 Syncing user with database via API:', walletAddress, userData)
     
     try {
-      const dbUserData = await DatabaseService.createOrUpdateUser({
-        wallet_address: walletAddress,
-        email: userData.email,
-        phone: userData.phone,
-        login_method: userData.loginMethod
+      // Call server-side API to create/update user (supabaseAdmin is only available on server)
+      const response = await fetch('/api/user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          wallet_address: walletAddress,
+          email: userData.email,
+          phone: userData.phone,
+          login_method: userData.loginMethod
+        })
       })
       
-      console.log('📊 Database response:', dbUserData)
+      const data = await response.json()
+      console.log('📊 API response:', data)
       
-      if (dbUserData) {
-        setDbUser(dbUserData)
-        console.log('✅ User synced with database:', dbUserData.id)
+      if (response.ok && data.user) {
+        setDbUser(data.user)
+        console.log('✅ User synced with database:', data.user.id)
         toast({
           title: "Account synced",
           description: "Your wallet is now connected to your account",
           variant: "default"
         })
       } else {
-        console.log('❌ No user data returned from database')
+        console.log('❌ API error:', data.error)
         toast({
           title: "Database sync failed",
-          description: "Could not sync with user database",
+          description: data.error || "Could not sync with user database",
           variant: "destructive"
         })
       }
