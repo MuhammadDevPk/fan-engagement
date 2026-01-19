@@ -12,6 +12,7 @@ A production-ready Web3 NFT ticketing platform built with Next.js 15. Users can 
 ## ✨ Features
 
 ### Core Functionality
+
 - **NFT Ticket Minting** - Purchase tickets minted as ERC-721 NFTs with metadata stored on IPFS
 - **Gasless Transactions** - Relayer-based minting covers gas fees for users
 - **Multi-Wallet Support** - MetaMask + Magic.link (email, phone, Google, Twitter, Discord OAuth)
@@ -19,11 +20,13 @@ A production-ready Web3 NFT ticketing platform built with Next.js 15. Users can 
 - **Built-in Marketplace** - List tickets for resale with automated profit splitting
 
 ### Smart Contracts
+
 - **MyNFT.sol** - ERC-721 with ERC-2981 royalties (5%) and ERC-4906 metadata updates
 - **Marketplace.sol** - Non-custodial resale with 40% organizer / 10% platform profit split
 - **MysteryBoxV2.sol** - Chainlink VRF v2.5 integration for random prize NFTs
 
 ### User Experience
+
 - **Responsive Dashboard** - View owned tickets, purchase history, and active listings
 - **AI Intent Parser** - Natural language commands ("Buy 2 tickets for Web3 Festival")
 - **Multiple Payment Methods** - Crypto, Credit Card, Alipay, WeChat Pay support
@@ -33,15 +36,15 @@ A production-ready Web3 NFT ticketing platform built with Next.js 15. Users can 
 
 ## 🛠 Tech Stack
 
-| Layer | Technology |
-|-------|------------|
-| **Frontend** | Next.js 15, React 19, TypeScript, Tailwind CSS |
-| **UI Components** | Radix UI, Lucide Icons, shadcn/ui |
-| **Blockchain** | Solidity 0.8.22, Hardhat, ethers.js v6 |
-| **Wallet Auth** | Magic.link SDK, MetaMask |
-| **Database** | Supabase (PostgreSQL) |
-| **Oracles** | Chainlink VRF v2.5 |
-| **Storage** | IPFS (Pinata-compatible) |
+| Layer             | Technology                                     |
+| ----------------- | ---------------------------------------------- |
+| **Frontend**      | Next.js 15, React 19, TypeScript, Tailwind CSS |
+| **UI Components** | Radix UI, Lucide Icons, shadcn/ui              |
+| **Blockchain**    | Solidity 0.8.22, Hardhat, ethers.js v6         |
+| **Wallet Auth**   | Magic.link SDK, MetaMask                       |
+| **Database**      | Supabase (PostgreSQL)                          |
+| **Oracles**       | Chainlink VRF v2.5                             |
+| **Storage**       | IPFS (Pinata-compatible)                       |
 
 ---
 
@@ -87,14 +90,37 @@ cd fan-engagement
 # Install dependencies
 pnpm install
 
-# Set up database (run in Supabase SQL editor)
-# See database/schema.sql and database/seed-events.sql
-
 # Start development server
 pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) to view the app.
+
+### Database Setup
+
+**Option 1: Supabase SQL Editor (Recommended for beginners)**
+
+1. Go to your [Supabase Dashboard](https://supabase.com/dashboard)
+2. Select your project → SQL Editor
+3. Run `database/schema.sql` first
+4. Then run `database/seed-events.sql`
+
+**Option 2: Supabase CLI**
+
+```bash
+# Link your project (if not already linked)
+supabase link --project-ref <your-project-ref>
+
+# Run the SQL files
+supabase db reset  # This resets and runs migrations
+```
+
+**Option 3: Manual psql**
+
+```bash
+psql <your-supabase-connection-string> -f database/schema.sql
+psql <your-supabase-connection-string> -f database/seed-events.sql
+```
 
 ### Deploy Contracts (Optional)
 
@@ -148,15 +174,15 @@ npx hardhat run scripts/set-marketplace-on-mynft.js --network sepolia
 
 ## 🔧 Key APIs
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/events` | GET | Fetch all events from database |
-| `/api/events/[id]` | GET | Fetch single event details |
-| `/api/mint-ticket` | POST | Mint NFT ticket (relayer covers gas) |
-| `/api/user/tickets` | POST | Get user's owned tickets |
-| `/api/marketplace/list` | POST | Create resale listing |
-| `/api/marketplace/listings` | GET | Get active marketplace listings |
-| `/api/assistant/intent` | POST | AI-powered command parsing |
+| Endpoint                    | Method | Description                          |
+| --------------------------- | ------ | ------------------------------------ |
+| `/api/events`               | GET    | Fetch all events from database       |
+| `/api/events/[id]`          | GET    | Fetch single event details           |
+| `/api/mint-ticket`          | POST   | Mint NFT ticket (relayer covers gas) |
+| `/api/user/tickets`         | POST   | Get user's owned tickets             |
+| `/api/marketplace/list`     | POST   | Create resale listing                |
+| `/api/marketplace/listings` | GET    | Get active marketplace listings      |
+| `/api/assistant/intent`     | POST   | AI-powered command parsing           |
 
 ---
 
@@ -173,11 +199,11 @@ npx hardhat run scripts/set-marketplace-on-mynft.js --network sepolia
 
 ## 💰 Marketplace Economics
 
-| Party | Share of Profit |
-|-------|-----------------|
-| Seller | 50% |
-| Event Organizer | 40% |
-| Platform | 10% |
+| Party           | Share of Profit |
+| --------------- | --------------- |
+| Seller          | 50%             |
+| Event Organizer | 40%             |
+| Platform        | 10%             |
 
 - **Price Cap:** Resale price cannot exceed 2x the last purchase price
 - **Royalties:** 5% ERC-2981 royalty on all secondary sales
@@ -202,11 +228,13 @@ pnpm build
 ## 🚢 Deployment
 
 ### Frontend (Vercel)
+
 ```bash
 vercel deploy
 ```
 
 ### Contracts (Base Mainnet)
+
 1. Add Base network to `hardhat.config.js`
 2. Update contract addresses in `.env`
 3. Run deployment scripts with `--network base`
@@ -216,6 +244,7 @@ vercel deploy
 ## 📝 Database Schema
 
 **Tables:**
+
 - `users` - Wallet addresses, login methods, profiles
 - `events` - Event details, pricing, ticket counts
 - `tickets` - NFT ownership records, purchase prices
@@ -233,6 +262,34 @@ See [`database/schema.sql`](./database/schema.sql) for full schema.
 - **Pausable** - Emergency pause functionality on smart contracts
 - **Marketplace Restrictions** - Only authorized marketplace can transfer tickets
 - **Dynamic QR Expiry** - QR codes rotate every 5 minutes
+
+---
+
+## 🔑 What's MISSING (Needs Work)
+
+### ❌ Admin Panel for Creating Events
+
+- **Current:** Events must be added directly to the Supabase database
+- **Needed:** An admin UI where organizers can:
+  - Create new events
+  - Set ticket prices
+  - Upload event images
+  - See sales analytics
+
+### ❌ Real Payment Processing
+
+- **Current:** Credit card/Alipay payments are SIMULATED (no actual charge)
+- **Needed:** Integrate Stripe or similar for real fiat payments
+
+### ❌ Dynamic NFT Artwork
+
+- **Current:** All tickets use the same metadata/image
+- **Needed:** Unique artwork per event, maybe even per ticket (seat numbers)
+
+### ❌ Venue Scanner App
+
+- **Current:** QR code generated, but no scanner app exists
+- **Needed:** Mobile app or web page for venue staff to scan tickets
 
 ---
 
