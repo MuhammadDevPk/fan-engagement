@@ -4,6 +4,8 @@ import { EventStatus } from "./types";
 
 interface StatusBadgeProps {
   status: EventStatus;
+  className?: string; // Optional custom classes
+  showLabel?: boolean; // Optional flag to hide text label
 }
 
 const statusConfig: Record<EventStatus, { color: string; bg: string; border: string }> = {
@@ -34,7 +36,7 @@ const statusConfig: Record<EventStatus, { color: string; bg: string; border: str
   }
 };
 
-export function StatusBadge({ status }: StatusBadgeProps) {
+export function StatusBadge({ status, className, showLabel = true }: StatusBadgeProps) {
   const config = statusConfig[status];
 
   return (
@@ -42,7 +44,8 @@ export function StatusBadge({ status }: StatusBadgeProps) {
       "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border",
       config.bg,
       config.color,
-      config.border
+      config.border,
+      className
     )}>
       {status === 'Live' && (
         <span className="relative flex h-1.5 w-1.5 items-center justify-center">
@@ -50,7 +53,7 @@ export function StatusBadge({ status }: StatusBadgeProps) {
           <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
         </span>
       )}
-      {status}
+      {showLabel && status}
     </div>
   );
 }
