@@ -265,6 +265,34 @@ See [`database/schema.sql`](./database/schema.sql) for full schema.
 
 ---
 
+## 🔑 What's MISSING (Needs Work)
+
+### ❌ Admin Panel for Creating Events
+
+- **Current:** Events must be added directly to the Supabase database
+- **Needed:** An admin UI where organizers can:
+  - Create new events
+  - Set ticket prices
+  - Upload event images
+  - See sales analytics
+
+### ❌ Real Payment Processing
+
+- **Current:** Credit card/Alipay payments are SIMULATED (no actual charge)
+- **Needed:** Integrate Stripe or similar for real fiat payments
+
+### ❌ Dynamic NFT Artwork
+
+- **Current:** All tickets use the same metadata/image
+- **Needed:** Unique artwork per event, maybe even per ticket (seat numbers)
+
+### ❌ Venue Scanner App
+
+- **Current:** QR code generated, but no scanner app exists
+- **Needed:** Mobile app or web page for venue staff to scan tickets
+
+---
+
 ## 🗺 Roadmap
 
 - [ ] Real payment processing (Stripe integration)
