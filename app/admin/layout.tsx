@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { DashboardLayout } from "@/components/layout/DashboardLayout"
+import { AdminDashboardLayout } from "./components/layout/AdminDashboardLayout"
 
 export const metadata: Metadata = {
   title: "Admin | Eureka",
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 }
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  return <DashboardLayout>{children}</DashboardLayout>
+  return <AdminDashboardLayout>{children}</AdminDashboardLayout>
 }
