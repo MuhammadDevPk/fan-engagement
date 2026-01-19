@@ -3,6 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { BarChart3, Ticket, Users, DollarSign, TrendingUp } from "lucide-react"
 import AnalyticsOverview from "./components/AnalyticsOverview"
+import CreateEventForm from "./components/CreateEventForm"
 
 export default function AdminDashboard() {
   return (
@@ -16,6 +17,9 @@ export default function AdminDashboard() {
 
       {/* Stats Grid */}
       <AnalyticsOverview />
+      
+      {/* Create Event Form */}
+      <CreateEventForm />
 
       {/* Recent Activity Section Placeholder */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
