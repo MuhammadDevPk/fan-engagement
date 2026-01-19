@@ -199,10 +199,22 @@ export default function AnalyticsOverview() {
   ]
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-      {cards.map((card, index) => (
-        <StatCard key={index} {...card} index={index} />
-      ))}
-    </div>
+    <>
+      {/* Mobile: Horizontal Scroll */}
+      <div className="flex md:hidden overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-4 px-4 scrollbar-hide">
+        {cards.map((card, index) => (
+          <div key={index} className="min-w-[85vw] snap-center">
+            <StatCard {...card} index={index} />
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop: Grid */}
+      <div className="hidden md:grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        {cards.map((card, index) => (
+          <StatCard key={index} {...card} index={index} />
+        ))}
+      </div>
+    </>
   )
 }

@@ -93,22 +93,30 @@ export default function CreateEventForm() {
   }
 
   return (
-    <div className="w-full mb-8">
-      <Card className="bg-black/40 border-white/10 backdrop-blur-xl overflow-hidden shadow-2xl">
+    <div className={cn(
+      "w-full mb-8 transition-all duration-300",
+      isOpen ? "fixed inset-0 z-[60] m-0 bg-eureka-bg md:relative md:bg-transparent md:z-auto md:mb-8" : ""
+    )}>
+      <Card className={cn(
+        "bg-black/40 border-white/10 backdrop-blur-xl overflow-hidden shadow-2xl flex flex-col transition-all duration-300",
+        isOpen ? "h-full rounded-none border-0 md:h-auto md:rounded-xl md:border" : ""
+      )}>
         
         {/* Header */}
-        <div className="p-6 border-b border-white/10 flex items-center justify-between">
+        <div className="p-6 border-b border-white/10 flex items-center justify-between shrink-0">
           <div className="space-y-1">
             <h2 className="text-xl font-bold text-white bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
               Create New Event
             </h2>
             <div className="flex items-center gap-2 text-sm text-gray-400">
               <span className="text-purple-400 font-medium">Step {currentStep} of {totalSteps}:</span>
-              {currentStep === 1 && "Basic Information"}
-              {currentStep === 2 && "Date & Location"}
-              {currentStep === 3 && "Pricing & Tickets"}
-              {currentStep === 4 && "NFT & Blockchain"}
-              {currentStep === 5 && "Additional Settings"}
+              <span className="hidden sm:inline">
+                {currentStep === 1 && "Basic Information"}
+                {currentStep === 2 && "Date & Location"}
+                {currentStep === 3 && "Pricing & Tickets"}
+                {currentStep === 4 && "NFT & Blockchain"}
+                {currentStep === 5 && "Additional Settings"}
+              </span>
             </div>
           </div>
           <Button 
@@ -122,10 +130,10 @@ export default function CreateEventForm() {
         </div>
 
         {/* Progress Bar */}
-        <Progress value={progress} className="h-1 rounded-none bg-white/5" indicatorClassName="bg-gradient-to-r from-purple-500 to-blue-500" />
+        <Progress value={progress} className="h-1 rounded-none bg-white/5 shrink-0" indicatorClassName="bg-gradient-to-r from-purple-500 to-blue-500" />
 
         {/* Form Content */}
-        <div className="p-6 min-h-[400px]">
+        <div className="p-6 min-h-[400px] flex-1 overflow-y-auto">
           <AnimatePresence mode="wait">
              <motion.div
                key={currentStep}
@@ -144,7 +152,7 @@ export default function CreateEventForm() {
         </div>
 
         {/* Footer Actions */}
-        <div className="p-6 bg-white/5 border-t border-white/10 flex justify-between items-center">
+        <div className="p-6 bg-white/5 border-t border-white/10 flex justify-between items-center shrink-0 mb-safe md:mb-0">
           <Button 
             variant="ghost" 
             onClick={handleBack} 
@@ -155,12 +163,12 @@ export default function CreateEventForm() {
           </Button>
 
           <div className="flex gap-3">
-            <Button variant="outline" className="border-purple-500/20 text-purple-400 hover:bg-purple-500/10">
+            <Button variant="outline" className="hidden sm:flex border-purple-500/20 text-purple-400 hover:bg-purple-500/10">
               Save Draft
             </Button>
             <Button 
               onClick={handleNext}
-              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white min-w-[140px]"
+              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white min-w-[120px] sm:min-w-[140px]"
               disabled={isSubmitting}
             >
               {isSubmitting ? (
@@ -168,9 +176,9 @@ export default function CreateEventForm() {
                     <div className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full" />
                  </div>
               ) : currentStep === totalSteps ? (
-                <>Deploy & Publish <Send className="ml-2 h-4 w-4" /></>
+                <>Deploy <span className="hidden sm:inline">&nbsp;& Publish</span> <Send className="ml-2 h-4 w-4" /></>
               ) : (
-                <>Next Step <ArrowRight className="ml-2 h-4 w-4" /></>
+                <>Next <span className="hidden sm:inline">&nbsp;Step</span> <ArrowRight className="ml-2 h-4 w-4" /></>
               )}
             </Button>
           </div>

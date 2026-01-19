@@ -22,6 +22,8 @@ import { TablePagination } from './TablePagination';
 import { EventAnalyticsPanel } from '../EventAnalyticsPanel';
 import { Event } from './types';
 
+import { MobileEventCard } from './MobileEventCard';
+
 export default function EventsTable() {
   const [selectedEvents, setSelectedEvents] = useState<string[]>([]);
   const [analyticsEvent, setAnalyticsEvent] = useState<Event | null>(null);
@@ -67,7 +69,8 @@ export default function EventsTable() {
     <div className="space-y-4">
       <EventsFilterBar />
 
-      <div className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-sm overflow-hidden">
+      {/* --- DESKTOP TABLE VIEW --- */}
+      <div className="hidden md:block rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-sm overflow-hidden">
         <Table>
           <TableHeader className="bg-[#0A0E27]/95 backdrop-blur supports-[backdrop-filter]:bg-[#0A0E27]/80 sticky top-0 z-10">
             <TableRow className="hover:bg-transparent border-white/10">
@@ -222,6 +225,14 @@ export default function EventsTable() {
         </Table>
         
         <TablePagination />
+      </div>
+
+      {/* --- MOBILE CARD LIST VIEW --- */}
+      <div className="md:hidden space-y-4">
+          {eventsData.map((event) => (
+             <MobileEventCard key={event.id} event={event} onAnalyticsClick={setAnalyticsEvent} />
+          ))}
+          <TablePagination />
       </div>
 
       <EventAnalyticsPanel 
