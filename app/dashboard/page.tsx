@@ -141,7 +141,7 @@ export default function Dashboard() {
           <Tabs defaultValue="tickets" className="w-full">
             <TabsList className="grid w-full grid-cols-2 bg-slate-800">
               <TabsTrigger value="tickets" className="text-slate-300 data-[state=active]:text-white">
-                <TicketIcon className="w-4 h-4 mr-2" />
+                <Ticket className="w-4 h-4 mr-2" />
                 My Tickets ({userData?.tickets.length || 0})
               </TabsTrigger>
               <TabsTrigger value="history" className="text-slate-300 data-[state=active]:text-white">
@@ -153,7 +153,7 @@ export default function Dashboard() {
             <TabsContent value="tickets" className="mt-6">
               {!userData?.tickets.length ? (
                 <Card className="bg-slate-800 border-slate-700 text-center p-8">
-                  <TicketIcon className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+                  <Ticket className="h-12 w-12 text-slate-400 mx-auto mb-4" />
                   <h3 className="text-xl font-semibold text-white mb-2">No Tickets Yet</h3>
                   <p className="text-slate-400 mb-6">
                     You haven&apos;t purchased any tickets yet. Browse our events and get your first NFT ticket!
@@ -485,7 +485,7 @@ export default function Dashboard() {
                             </div>
                           </div>
                           <div className="text-right">
-                            <Price usd={purchase.amount_usd} eth={0} className="text-white" />
+                            <Price usd={purchase.amount_usd} className="text-white" />
                             <div className={`text-sm ${
                               purchase.status === 'completed' ? 'text-green-400' : 
                               purchase.status === 'failed' ? 'text-red-400' : 'text-yellow-400'
