@@ -9,6 +9,7 @@ import { CalendarDays, Clock, MapPin, Ticket as TicketIcon, Loader2, ExternalLin
 import { Price } from "@/components/price"
 import Link from "next/link"
 import type { Ticket, User as DatabaseUser, PurchaseHistory } from "@/lib/supabase"
+import EventHeader from "@/components/event-header"
 import { TicketQR } from "@/components/ticket-qr"
 import {
   Dialog,
@@ -116,10 +117,13 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-white mb-2">My Dashboard</h1>
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800">
+      <EventHeader />
+      <div className="container mx-auto px-4 py-8 pt-28">
+        <div className="mb-8">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-white mb-2">My Dashboard</h1>
           <div className="flex items-center text-slate-300 text-sm">
             <div className="flex items-center mr-6">
               <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
@@ -503,6 +507,9 @@ export default function Dashboard() {
           </Tabs>
         )}
 
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
