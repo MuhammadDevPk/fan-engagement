@@ -135,6 +135,7 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+    </div>
 
         {error ? (
           <Card className="bg-slate-800 border-slate-700 text-center p-8">
@@ -507,8 +508,6 @@ export default function Dashboard() {
           </Tabs>
         )}
 
-          </div>
-        </div>
       </div>
     </div>
   )
