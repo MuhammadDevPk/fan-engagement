@@ -201,7 +201,7 @@ export default function Dashboard() {
                           <div>
                             <div className="text-xs text-slate-500">Paid via {ticket.payment_method}</div>
                             {ticket.purchase_price_usd && (
-                              <Price usd={ticket.purchase_price_usd} eth={ticket.purchase_price_eth} className="text-sm" />
+                              <Price usd={ticket.purchase_price_usd || 0} eth={ticket.purchase_price_eth || 0} className="text-sm" />
                             )}
                           </div>
                           <div className="flex items-center space-x-2">
@@ -502,7 +502,7 @@ export default function Dashboard() {
             </TabsContent>
           </Tabs>
         )}
-      )}
+
     </div>
   )
 }
