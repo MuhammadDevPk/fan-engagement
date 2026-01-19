@@ -7,13 +7,13 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 
 const navItems = [
-  { name: "Dashboard", href: "/dashboard", icon: Home },
-  { name: "Events", href: "/dashboard/events", icon: Ticket },
-  { name: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
-  { name: "Attendees", href: "/dashboard/attendees", icon: Users },
-  { name: "Revenue", href: "/dashboard/revenue", icon: DollarSign },
-  { name: "Settings", href: "/dashboard/settings", icon: Settings },
-  { name: "Help", href: "/dashboard/help", icon: CircleHelp },
+  { name: "Dashboard", href: "/admin", icon: Home },
+  { name: "Events", href: "/admin/events", icon: Ticket },
+  { name: "Analytics", href: "/admin/analytics", icon: BarChart3 },
+  { name: "Attendees", href: "/admin/attendees", icon: Users },
+  { name: "Revenue", href: "/admin/revenue", icon: DollarSign },
+  { name: "Settings", href: "/admin/settings", icon: Settings },
+  { name: "Help", href: "/admin/help", icon: CircleHelp },
 ]
 
 interface SidebarProps {
