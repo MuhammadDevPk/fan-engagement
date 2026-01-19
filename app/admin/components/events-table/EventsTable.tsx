@@ -19,9 +19,12 @@ import { EventsFilterBar } from './EventsFilterBar';
 import { StatusBadge } from './StatusBadge';
 import { ActionMenu } from './ActionMenu';
 import { TablePagination } from './TablePagination';
+import { EventAnalyticsPanel } from '../EventAnalyticsPanel';
+import { Event } from './types';
 
 export default function EventsTable() {
   const [selectedEvents, setSelectedEvents] = useState<string[]>([]);
+  const [analyticsEvent, setAnalyticsEvent] = useState<Event | null>(null);
 
   const toggleSelectAll = () => {
     if (selectedEvents.length === eventsData.length) {
@@ -200,9 +203,15 @@ export default function EventsTable() {
                       <Button size="icon" variant="ghost" className="h-8 w-8 rounded-full text-gray-400 hover:text-white hover:bg-white/10" title="Edit">
                         <Pen className="h-4 w-4" />
                       </Button>
-                      <Button size="icon" variant="ghost" className="h-8 w-8 rounded-full text-gray-400 hover:text-white hover:bg-white/10" title="Analytics">
-                        <BarChart3 className="h-4 w-4" />
-                      </Button>
+                        <Button 
+                          size="icon" 
+                          variant="ghost" 
+                          className="h-8 w-8 rounded-full text-gray-400 hover:text-white hover:bg-white/10" 
+                          title="Analytics"
+                          onClick={() => setAnalyticsEvent(event)}
+                        >
+                          <BarChart3 className="h-4 w-4" />
+                        </Button>
                       <ActionMenu />
                     </div>
                   </TableCell>
@@ -214,6 +223,12 @@ export default function EventsTable() {
         
         <TablePagination />
       </div>
+
+      <EventAnalyticsPanel 
+        isOpen={!!analyticsEvent} 
+        onClose={() => setAnalyticsEvent(null)} 
+        event={analyticsEvent} 
+      />
     </div>
   );
 }
