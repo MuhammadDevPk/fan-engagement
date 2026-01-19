@@ -53,6 +53,10 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        "eureka-bg": "#0a0e27",
+        "eureka-card": "rgba(255,255,255,0.05)",
+        "brand-start": "#6366f1",
+        "brand-end": "#8b5cf6",
       },
       borderRadius: {
         lg: "var(--radius)",
