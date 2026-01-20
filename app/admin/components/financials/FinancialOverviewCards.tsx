@@ -21,7 +21,7 @@ export function FinancialOverviewCards() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
       >
-        <Card className="h-full bg-eureka-card border-eureka-card backdrop-blur-md bg-white/5 border-white/10">
+        <Card className="h-full bg-eureka-card border-eureka-card backdrop-blur-md">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-gray-400">Total Earnings</CardTitle>
             <div className="p-2 bg-purple-500/20 rounded-lg">
@@ -50,7 +50,7 @@ export function FinancialOverviewCards() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.1 }}
       >
-        <Card className="h-full bg-eureka-card border-eureka-card backdrop-blur-md bg-white/5 border-white/10">
+        <Card className="h-full bg-eureka-card border-eureka-card backdrop-blur-md">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-gray-400">Available Balance</CardTitle>
             <div className="p-2 bg-green-500/20 rounded-lg">
@@ -82,7 +82,7 @@ export function FinancialOverviewCards() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.2 }}
       >
-        <Card className="h-full bg-eureka-card border-eureka-card backdrop-blur-md bg-white/5 border-white/10">
+        <Card className="h-full bg-eureka-card border-eureka-card backdrop-blur-md">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-gray-400">Pending Settlement</CardTitle>
              <div className="p-2 bg-blue-500/20 rounded-lg">
@@ -111,7 +111,7 @@ export function FinancialOverviewCards() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: 0.3 }}
       >
-        <Card className="h-full bg-eureka-card border-eureka-card backdrop-blur-md bg-white/5 border-white/10">
+        <Card className="h-full bg-eureka-card border-eureka-card backdrop-blur-md">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-gray-400">Platform Fees Paid</CardTitle>
              <div className="p-2 bg-orange-500/20 rounded-lg">

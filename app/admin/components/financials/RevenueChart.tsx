@@ -25,7 +25,7 @@ export function RevenueChart() {
   }
 
   return (
-    <Card className="bg-eureka-card border-eureka-card backdrop-blur-md bg-white/5 border-white/10">
+    <Card className="bg-eureka-card border-eureka-card backdrop-blur-md">
       <CardHeader className="flex flex-row items-center justify-between pb-8">
         <div className="space-y-1">
           <CardTitle className="text-xl font-bold text-white">Revenue Analytics</CardTitle>

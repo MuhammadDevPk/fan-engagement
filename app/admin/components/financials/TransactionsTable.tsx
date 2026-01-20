@@ -13,7 +13,9 @@ import {
   AlertCircle, 
   XCircle,
   Copy,
-  ExternalLink
+  ExternalLink,
+  Zap,
+  CreditCard
 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -154,7 +156,7 @@ export function TransactionsTable() {
   const [statusFilter, setStatusFilter] = useState("all")
 
   return (
-    <Card className="bg-eureka-card border-eureka-card backdrop-blur-md bg-white/5 border-white/10">
+    <Card className="bg-eureka-card border-eureka-card backdrop-blur-md">
       <CardHeader>
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>

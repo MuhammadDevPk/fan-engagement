@@ -21,7 +21,7 @@ export function PaymentMethodsBreakdown() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
       {/* Chart - Payment Type Distribution */}
-      <Card className="bg-eureka-card border-eureka-card backdrop-blur-md bg-white/5 border-white/10">
+      <Card className="bg-eureka-card border-eureka-card backdrop-blur-md">
         <CardHeader>
           <CardTitle className="text-lg font-semibold text-white">Payment Distribution</CardTitle>
           <p className="text-sm text-gray-400">Revenue split by payment method</p>
@@ -73,7 +73,7 @@ export function PaymentMethodsBreakdown() {
       </Card>
 
       {/* Blockchain Networks */}
-      <Card className="bg-eureka-card border-eureka-card backdrop-blur-md bg-white/5 border-white/10">
+      <Card className="bg-eureka-card border-eureka-card backdrop-blur-md">
         <CardHeader>
             <CardTitle className="text-lg font-semibold text-white">Blockchain Performance</CardTitle>
             <p className="text-sm text-gray-400">Revenue & Stats by Network</p>

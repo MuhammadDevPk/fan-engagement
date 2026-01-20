@@ -4,14 +4,13 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Home, Ticket, BarChart3, Users, DollarSign, Settings, CircleHelp, Menu } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
 
 const navItems = [
   { name: "Dashboard", href: "/admin", icon: Home },
   { name: "Events", href: "/admin/events", icon: Ticket },
   { name: "Analytics", href: "/admin/analytics", icon: BarChart3 },
   { name: "Attendees", href: "/admin/attendees", icon: Users },
-  { name: "Revenue", href: "/admin/revenue", icon: DollarSign },
+  { name: "Financials", href: "/admin/financials", icon: DollarSign },
   { name: "Settings", href: "/admin/settings", icon: Settings },
   { name: "Help", href: "/admin/help", icon: CircleHelp },
 ]
