@@ -146,6 +146,15 @@ const StatCard = ({ title, value, subValue, icon: Icon, trend, trendUp = true, d
 }
 
 export default function AnalyticsOverview() {
+  const [activeIndex, setActiveIndex] = useState(0)
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const container = e.currentTarget
+    const cardWidth = container.clientWidth * 0.85 // 85vw
+    const index = Math.round(container.scrollLeft / cardWidth)
+    setActiveIndex(Math.min(Math.max(0, index), 5)) // Clamp between 0 and 5
+  }
+
   const cards = [
     {
       title: "Total Events",
@@ -201,12 +210,27 @@ export default function AnalyticsOverview() {
   return (
     <>
       {/* Mobile: Horizontal Scroll */}
-      <div className="flex md:hidden overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-4 px-4 scrollbar-hide">
-        {cards.map((card, index) => (
-          <div key={index} className="min-w-[85vw] snap-center">
-            <StatCard {...card} index={index} />
-          </div>
-        ))}
+      <div className="md:hidden">
+        <div 
+          className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-4 px-4 scrollbar-hide"
+          onScroll={handleScroll}
+        >
+          {cards.map((card, index) => (
+            <div key={index} className="min-w-[85vw] snap-center">
+              <StatCard {...card} index={index} />
+            </div>
+          ))}
+        </div>
+        
+        {/* Swipe Indicators */}
+        <div className="flex justify-center gap-2 mb-6">
+          {cards.map((_, i) => (
+            <div 
+              key={i} 
+              className={`h-1.5 rounded-full transition-all duration-300 ${i === activeIndex ? 'w-5 bg-gradient-to-r from-brand-start to-brand-end' : 'w-1.5 bg-white/20'}`} 
+            />
+          ))}
+        </div>
       </div>
 
       {/* Desktop: Grid */}
