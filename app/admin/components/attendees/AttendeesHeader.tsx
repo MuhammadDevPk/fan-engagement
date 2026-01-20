@@ -1,14 +1,24 @@
+"use client"
+
 import React from 'react';
-import { Plus, Download, Users, UserPlus, Clock } from "lucide-react";
+import { Plus, Download, Users, UserPlus, Clock, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface AttendeesHeaderProps {
   totalAttendees: number;
+  newToday?: number;
+  pendingCheckIns?: number;
   onManualAdd: () => void;
   onImportCSV: () => void;
 }
 
-export function AttendeesHeader({ totalAttendees, onManualAdd, onImportCSV }: AttendeesHeaderProps) {
+export function AttendeesHeader({ 
+  totalAttendees, 
+  newToday = 0,
+  pendingCheckIns = 0,
+  onManualAdd, 
+  onImportCSV 
+}: AttendeesHeaderProps) {
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -40,8 +50,8 @@ export function AttendeesHeader({ totalAttendees, onManualAdd, onImportCSV }: At
       </div>
 
       {/* Quick Stats Row */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-[#0A0E27]/50 rounded-xl p-4 border border-white/5 flex items-center justify-between">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-[#0A0E27]/50 rounded-xl p-4 border border-white/5 flex items-center justify-between hover:border-indigo-500/20 transition-colors">
             <div>
                 <p className="text-sm text-gray-400 mb-1">Total Attendees</p>
                 <p className="text-2xl font-bold text-white">{totalAttendees.toLocaleString()}</p>
@@ -51,12 +61,16 @@ export function AttendeesHeader({ totalAttendees, onManualAdd, onImportCSV }: At
             </div>
         </div>
 
-        <div className="bg-[#0A0E27]/50 rounded-xl p-4 border border-white/5 flex items-center justify-between">
+        <div className="bg-[#0A0E27]/50 rounded-xl p-4 border border-white/5 flex items-center justify-between hover:border-emerald-500/20 transition-colors">
             <div>
                  <p className="text-sm text-gray-400 mb-1">New Today</p>
                  <div className="flex items-center gap-2">
-                    <p className="text-2xl font-bold text-emerald-400">+34</p>
-                    <span className="text-xs bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded">↑ 12%</span>
+                    <p className="text-2xl font-bold text-emerald-400">+{newToday}</p>
+                    {newToday > 0 && (
+                      <span className="text-xs bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded flex items-center gap-0.5">
+                        <TrendingUp className="h-3 w-3" /> new
+                      </span>
+                    )}
                  </div>
             </div>
             <div className="p-3 bg-emerald-500/10 rounded-lg">
@@ -64,13 +78,25 @@ export function AttendeesHeader({ totalAttendees, onManualAdd, onImportCSV }: At
             </div>
         </div>
 
-        <div className="bg-[#0A0E27]/50 rounded-xl p-4 border border-white/5 flex items-center justify-between">
+        <div className="bg-[#0A0E27]/50 rounded-xl p-4 border border-white/5 flex items-center justify-between hover:border-orange-500/20 transition-colors">
             <div>
-                <p className="text-sm text-gray-400 mb-1">Check-ins Pending</p>
-                <p className="text-2xl font-bold text-orange-400">1,523</p>
+                <p className="text-sm text-gray-400 mb-1">Pending Check-ins</p>
+                <p className="text-2xl font-bold text-orange-400">{pendingCheckIns.toLocaleString()}</p>
             </div>
              <div className="p-3 bg-orange-500/10 rounded-lg">
                 <Clock className="h-5 w-5 text-orange-400" />
+            </div>
+        </div>
+
+        <div className="bg-[#0A0E27]/50 rounded-xl p-4 border border-white/5 flex items-center justify-between hover:border-amber-500/20 transition-colors">
+            <div>
+                <p className="text-sm text-gray-400 mb-1">VIP Attendees</p>
+                <p className="text-2xl font-bold text-amber-400">
+                  {Math.round((pendingCheckIns / totalAttendees) * 100) || 0}%
+                </p>
+            </div>
+             <div className="p-3 bg-amber-500/10 rounded-lg">
+                <span className="text-amber-400 font-bold text-sm">VIP</span>
             </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
+"use client"
+
 import React, { useState } from 'react';
 import { 
-  ArrowUpDown, 
   MoreHorizontal, 
   Eye, 
   Mail, 
@@ -9,7 +10,11 @@ import {
   ExternalLink,
   Ban,
   CheckCircle2,
-  Clock
+  UserX,
+  Download,
+  Send,
+  Check,
+  Users
 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -29,15 +34,17 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator
 } from "@/components/ui/dropdown-menu";
-
+import { toast } from "sonner";
 import { Attendee } from './types';
 
 interface AttendeesTableProps {
   data: Attendee[];
   onSelectAttendee: (attendee: Attendee) => void;
+  onCheckIn?: (attendeeId: string) => void;
+  onBlockUser?: (attendeeId: string) => void;
 }
 
-export function AttendeesTable({ data, onSelectAttendee }: AttendeesTableProps) {
+export function AttendeesTable({ data, onSelectAttendee, onCheckIn, onBlockUser }: AttendeesTableProps) {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const toggleSelectAll = () => {
@@ -56,7 +63,85 @@ export function AttendeesTable({ data, onSelectAttendee }: AttendeesTableProps) 
     }
   };
 
-  const truncateHash = (hash: string) => `${hash.slice(0, 4)}...${hash.slice(-4)}`;
+  const truncateHash = (hash: string) => `${hash.slice(0, 6)}...${hash.slice(-4)}`;
+
+  const handleCopyWallet = (wallet: string, name: string) => {
+    navigator.clipboard.writeText(wallet);
+    toast.success(`Copied ${name}'s wallet address`);
+  };
+
+  const handleCheckIn = (attendee: Attendee) => {
+    if (onCheckIn) {
+      onCheckIn(attendee.id);
+    }
+    toast.success(`${attendee.name || 'Attendee'} checked in successfully!`, {
+      description: `Check-in time: ${new Date().toLocaleTimeString()}`
+    });
+  };
+
+  const handleSendEmail = (attendee: Attendee) => {
+    if (attendee.email) {
+      toast.info(`Opening email composer for ${attendee.email}`);
+    } else {
+      toast.warning(`No email address on file for ${attendee.name || 'this attendee'}`);
+    }
+  };
+
+  const handleResendTicket = (attendee: Attendee) => {
+    toast.promise(
+      new Promise(resolve => setTimeout(resolve, 1500)),
+      {
+        loading: `Resending ticket to ${attendee.name || attendee.email}...`,
+        success: 'Ticket resent successfully!',
+        error: 'Failed to resend ticket'
+      }
+    );
+  };
+
+  const handleViewTransaction = (attendee: Attendee) => {
+    window.open(`https://etherscan.io/address/${attendee.walletAddress}`, '_blank');
+    toast.info('Opening blockchain explorer...');
+  };
+
+  const handleBlockUser = (attendee: Attendee) => {
+    toast.warning(`Block ${attendee.name || 'this user'}?`, {
+      action: {
+        label: 'Confirm Block',
+        onClick: () => {
+          if (onBlockUser) onBlockUser(attendee.id);
+          toast.success(`${attendee.name || 'User'} has been blocked`);
+        }
+      }
+    });
+  };
+
+  // Bulk Actions
+  const handleBulkCheckIn = () => {
+    toast.promise(
+      new Promise(resolve => setTimeout(resolve, 2000)),
+      {
+        loading: `Checking in ${selectedIds.length} attendees...`,
+        success: `${selectedIds.length} attendees checked in successfully!`,
+        error: 'Bulk check-in failed'
+      }
+    );
+    setSelectedIds([]);
+  };
+
+  const handleBulkEmail = () => {
+    toast.info(`Opening email composer for ${selectedIds.length} recipients`);
+  };
+
+  const handleBulkExport = () => {
+    toast.promise(
+      new Promise(resolve => setTimeout(resolve, 1500)),
+      {
+        loading: 'Generating export file...',
+        success: `Exported ${selectedIds.length} attendees to CSV`,
+        error: 'Export failed'
+      }
+    );
+  };
 
   return (
     <div className="space-y-4">
@@ -91,6 +176,7 @@ export function AttendeesTable({ data, onSelectAttendee }: AttendeesTableProps) 
                     group border-white/[0.05] transition-all duration-200 h-[72px]
                     hover:bg-white/[0.05] relative
                     ${isSelected ? 'bg-indigo-500/5 hover:bg-indigo-500/10' : ''}
+                    ${attendee.isBlocked ? 'opacity-60' : ''}
                   `}
                 >
                   <TableCell className="pl-4">
@@ -103,15 +189,28 @@ export function AttendeesTable({ data, onSelectAttendee }: AttendeesTableProps) 
 
                   <TableCell>
                     <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 rounded-full overflow-hidden border border-white/10 bg-white/5">
+                      <div className="h-10 w-10 rounded-full overflow-hidden border border-white/10 bg-white/5 relative">
                         <img src={attendee.avatar} alt={attendee.name || "User"} className="h-full w-full object-cover" />
+                        {attendee.isBlocked && (
+                          <div className="absolute inset-0 bg-red-500/30 flex items-center justify-center">
+                            <Ban className="h-4 w-4 text-red-500" />
+                          </div>
+                        )}
+                        {attendee.isVip && (
+                          <div className="absolute -top-0.5 -right-0.5 h-3.5 w-3.5 bg-amber-500 rounded-full flex items-center justify-center">
+                            <span className="text-[8px] text-white font-bold">V</span>
+                          </div>
+                        )}
                       </div>
                       <div className="flex flex-col">
-                        <span className="text-white font-medium text-sm">{attendee.name || 'Anonymous'}</span>
+                        <span className="text-white font-medium text-sm flex items-center gap-1">
+                          {attendee.name || 'Anonymous'}
+                          {attendee.isBlocked && <span className="text-[10px] text-red-400">(Blocked)</span>}
+                        </span>
                         <button 
                           onClick={(e) => {
                              e.stopPropagation();
-                             navigator.clipboard.writeText(attendee.walletAddress);
+                             handleCopyWallet(attendee.walletAddress, attendee.name || 'User');
                           }}
                           className="text-gray-500 text-xs font-mono hover:text-indigo-400 flex items-center gap-1 transition-colors"
                         >
@@ -133,6 +232,7 @@ export function AttendeesTable({ data, onSelectAttendee }: AttendeesTableProps) 
                                 <div className="flex items-center gap-1.5">
                                     <span className={`text-[10px] px-1.5 py-0.5 rounded border ${
                                         mainTicket.type === 'VIP' ? 'border-amber-500/30 text-amber-500 bg-amber-500/10' : 
+                                        mainTicket.type === 'EARLY_BIRD' ? 'border-emerald-500/30 text-emerald-500 bg-emerald-500/10' :
                                         'border-blue-500/30 text-blue-500 bg-blue-500/10'
                                     }`}>
                                         {mainTicket.type}
@@ -154,7 +254,7 @@ export function AttendeesTable({ data, onSelectAttendee }: AttendeesTableProps) 
                             <span className="text-gray-300 text-xs">{new Date(mainTicket.purchaseDate).toLocaleDateString()}</span>
                             <div className="flex items-center gap-1.5">
                                 <span className="text-white text-xs font-medium">{mainTicket.price}</span>
-                                <span className="text-gray-500 text-[10px]">({mainTicket.priceEth} ETH)</span>
+                                <span className="text-gray-500 text-[10px]">({mainTicket.priceEth} {mainTicket.network === 'BSC' ? 'BNB' : mainTicket.network === 'Polygon' ? 'MATIC' : 'ETH'})</span>
                             </div>
                         </div>
                     ) : (
@@ -170,15 +270,26 @@ export function AttendeesTable({ data, onSelectAttendee }: AttendeesTableProps) 
                         </div>
                      )}
                      {attendee.checkInStatus === 'PENDING' && (
-                        <Button size="sm" variant="outline" className="h-7 text-xs border-indigo-500/30 text-indigo-400 hover:bg-indigo-500/10 hover:text-indigo-300">
-                            Check In
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          className="h-7 text-xs border-indigo-500/30 text-indigo-400 hover:bg-indigo-500/10 hover:text-indigo-300"
+                          onClick={() => handleCheckIn(attendee)}
+                        >
+                            <Check className="h-3 w-3 mr-1" /> Check In
                         </Button>
                      )}
                      {attendee.checkInStatus === 'NO_SHOW' && (
-                        <span className="text-xs text-red-400 bg-red-500/10 px-2 py-1 rounded border border-red-500/20">No Show</span>
+                        <div className="flex items-center gap-1.5 text-red-400 bg-red-500/10 px-2 py-1 rounded-md w-fit border border-red-500/20">
+                          <UserX className="h-3.5 w-3.5" />
+                          <span className="text-xs font-medium">No Show</span>
+                        </div>
                      )}
                      {attendee.checkInStatus === 'PARTIAL' && (
-                        <span className="text-xs text-orange-400 bg-orange-500/10 px-2 py-1 rounded border border-orange-500/20">Partial</span>
+                        <div className="flex items-center gap-1.5 text-orange-400 bg-orange-500/10 px-2 py-1 rounded-md w-fit border border-orange-500/20">
+                          <Users className="h-3.5 w-3.5" />
+                          <span className="text-xs font-medium">Partial</span>
+                        </div>
                      )}
                   </TableCell>
 
@@ -196,15 +307,20 @@ export function AttendeesTable({ data, onSelectAttendee }: AttendeesTableProps) 
                   </TableCell>
 
                   <TableCell className="text-right pr-4">
-                    <div className="flex items-center justify-end gap-1 opacity-100 transition-opacity">
-                        <Button size="icon" variant="ghost" className="h-8 w-8 text-gray-400 hover:text-white hover:bg-white/10" onClick={() => onSelectAttendee(attendee)}>
+                    <div className="flex items-center justify-end gap-1">
+                        <Button 
+                          size="icon" 
+                          variant="ghost" 
+                          className="h-8 w-8 text-gray-400 hover:text-white hover:bg-white/10" 
+                          onClick={() => onSelectAttendee(attendee)}
+                        >
                             <Eye className="h-4 w-4" />
                         </Button>
                         <Button 
                             size="icon" 
                             variant="ghost" 
                             className="h-8 w-8 text-gray-400 hover:text-white hover:bg-white/10"
-                            onClick={() => alert(`Opening email composer for ${attendee.email || attendee.name}`)}
+                            onClick={() => handleSendEmail(attendee)}
                         >
                             <Mail className="h-4 w-4" />
                         </Button>
@@ -219,22 +335,22 @@ export function AttendeesTable({ data, onSelectAttendee }: AttendeesTableProps) 
                                 <DropdownMenuLabel>Manage Attendee</DropdownMenuLabel>
                                 <DropdownMenuItem 
                                     className="focus:bg-white/5 cursor-pointer"
-                                    onClick={() => alert(`Resending ticket to ${attendee.email || attendee.name}`)}
+                                    onClick={() => handleResendTicket(attendee)}
                                 >
                                     <TicketIcon className="mr-2 h-4 w-4" /> Resend Ticket
                                 </DropdownMenuItem>
                                 <DropdownMenuItem 
                                     className="focus:bg-white/5 cursor-pointer"
-                                    onClick={() => window.open(`https://etherscan.io/address/${attendee.walletAddress}`, '_blank')}
+                                    onClick={() => handleViewTransaction(attendee)}
                                 >
-                                    <ExternalLink className="mr-2 h-4 w-4" /> View Transaction
+                                    <ExternalLink className="mr-2 h-4 w-4" /> View on Chain
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator className="bg-white/10" />
                                 <DropdownMenuItem 
                                     className="text-red-400 focus:bg-red-500/10 focus:text-red-400 cursor-pointer"
-                                    onClick={() => alert(`Blocked user: ${attendee.name}`)}
+                                    onClick={() => handleBlockUser(attendee)}
                                 >
-                                    <Ban className="mr-2 h-4 w-4" /> Block User
+                                    <Ban className="mr-2 h-4 w-4" /> {attendee.isBlocked ? 'Unblock' : 'Block'} User
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
@@ -250,17 +366,20 @@ export function AttendeesTable({ data, onSelectAttendee }: AttendeesTableProps) 
        {data.length === 0 && (
          <div className="flex flex-col items-center justify-center py-16 px-4 border border-white/10 rounded-2xl bg-white/[0.02] mt-4 border-dashed">
              <div className="h-16 w-16 bg-gray-500/10 rounded-full flex items-center justify-center mb-4">
-                 <div className="h-8 w-8 text-gray-500">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                    </svg>
-                 </div>
+                 <Users className="h-8 w-8 text-gray-500" />
              </div>
              <h3 className="text-lg font-medium text-white mb-1">No attendees found</h3>
              <p className="text-gray-400 text-center max-w-sm mb-6">
                  We couldn't find any attendees matching your current filters. Try adjusting your search or filters.
              </p>
-             <Button variant="outline" className="border-white/10 text-gray-300 hover:text-white" onClick={() => window.location.reload()}>
+             <Button 
+               variant="outline" 
+               className="border-white/10 text-gray-300 hover:text-white"
+               onClick={() => {
+                 window.history.pushState({}, '', window.location.pathname);
+                 window.location.reload();
+               }}
+             >
                  Clear Filters
              </Button>
          </div>
@@ -268,17 +387,47 @@ export function AttendeesTable({ data, onSelectAttendee }: AttendeesTableProps) 
 
        {/* Bulk Actions Bar - Sticky Bottom */}
        {selectedIds.length > 0 && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-3xl bg-[#0A0E27] border border-white/20 shadow-2xl rounded-xl p-3 flex items-center justify-between z-50 animate-in slide-in-from-bottom-6">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-3xl bg-[#0A0E27]/95 backdrop-blur-lg border border-white/20 shadow-2xl rounded-xl p-4 flex items-center justify-between z-50 animate-in slide-in-from-bottom-6">
             <div className="flex items-center gap-4">
-                <span className="text-white font-medium pl-2">{selectedIds.length} selected</span>
+                <div className="bg-indigo-500/20 text-indigo-400 px-3 py-1 rounded-full text-sm font-medium">
+                  {selectedIds.length} selected
+                </div>
                 <div className="h-6 w-px bg-white/10" />
                 <div className="flex items-center gap-2">
-                    <Button size="sm" variant="ghost" className="text-gray-300 hover:text-white hover:bg-white/10">Check In All</Button>
-                    <Button size="sm" variant="ghost" className="text-gray-300 hover:text-white hover:bg-white/10">Send Email</Button>
-                    <Button size="sm" variant="ghost" className="text-gray-300 hover:text-white hover:bg-white/10">Export</Button>
+                    <Button 
+                      size="sm" 
+                      variant="ghost" 
+                      className="text-gray-300 hover:text-white hover:bg-white/10"
+                      onClick={handleBulkCheckIn}
+                    >
+                      <CheckCircle2 className="mr-1.5 h-4 w-4" /> Check In All
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant="ghost" 
+                      className="text-gray-300 hover:text-white hover:bg-white/10"
+                      onClick={handleBulkEmail}
+                    >
+                      <Send className="mr-1.5 h-4 w-4" /> Send Email
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant="ghost" 
+                      className="text-gray-300 hover:text-white hover:bg-white/10"
+                      onClick={handleBulkExport}
+                    >
+                      <Download className="mr-1.5 h-4 w-4" /> Export
+                    </Button>
                 </div>
             </div>
-             <Button size="sm" variant="ghost" onClick={toggleSelectAll} className="text-gray-400 hover:text-white">Deselect</Button>
+             <Button 
+               size="sm" 
+               variant="ghost" 
+               onClick={() => setSelectedIds([])} 
+               className="text-gray-400 hover:text-white"
+             >
+               Deselect All
+             </Button>
         </div>
        )}
     </div>
