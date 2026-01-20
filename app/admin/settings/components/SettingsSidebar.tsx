@@ -11,7 +11,17 @@ import {
   Shield,
   Palette,
   Receipt,
+  Menu,
 } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface SettingsSidebarProps {
   activeTab: string;
@@ -69,32 +79,78 @@ const sidebarItems = [
   },
 ];
 
-export function SettingsSidebar({ activeTab, onTabChange }: SettingsSidebarProps) {
+function SidebarContent({ activeTab, onTabChange, onItemClick }: SettingsSidebarProps & { onItemClick?: () => void }) {
   return (
-    <aside className="w-[240px] shrink-0 border-r bg-card/50 backdrop-blur-sm sticky top-20 h-[calc(100vh-5rem)] overflow-y-auto hidden md:block">
-      <div className="p-4 space-y-1">
-        {sidebarItems.map((item) => (
-          <button
-            key={item.id}
-            onClick={() => onTabChange(item.id)}
-            className={cn(
-              "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
-              "hover:bg-accent hover:text-accent-foreground",
-              activeTab === item.id
-                ? "bg-primary/10 text-primary hover:bg-primary/15"
-                : "text-muted-foreground"
-            )}
-          >
-            <item.icon className="w-4 h-4 shrink-0" />
-            <div className="flex flex-col items-start gap-0.5">
-              <span>{item.label}</span>
-              {/* <span className="text-[10px] text-muted-foreground/70 font-normal">
-                {item.description}
-              </span> */}
-            </div>
-          </button>
-        ))}
+    <div className="p-4 space-y-1">
+      {sidebarItems.map((item) => (
+        <button
+          key={item.id}
+          onClick={() => {
+            onTabChange(item.id);
+            onItemClick?.();
+          }}
+          className={cn(
+            "w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all",
+            "hover:bg-accent hover:text-accent-foreground",
+            activeTab === item.id
+              ? "bg-primary/10 text-primary hover:bg-primary/15"
+              : "text-muted-foreground"
+          )}
+        >
+          <item.icon className={cn(
+            "w-5 h-5 shrink-0 transition-colors",
+            activeTab === item.id ? "text-primary" : ""
+          )} />
+          <div className="flex flex-col items-start gap-0.5 text-left">
+            <span>{item.label}</span>
+            <span className="text-[10px] text-muted-foreground/70 font-normal hidden lg:block">
+              {item.description}
+            </span>
+          </div>
+        </button>
+      ))}
+    </div>
+  );
+}
+
+export function SettingsSidebar({ activeTab, onTabChange }: SettingsSidebarProps) {
+  const [open, setOpen] = React.useState(false);
+
+  return (
+    <>
+      {/* Desktop Sidebar */}
+      <aside className="w-[260px] shrink-0 border-r bg-card/50 backdrop-blur-sm sticky top-20 h-[calc(100vh-5rem)] overflow-hidden hidden md:block">
+        <ScrollArea className="h-full">
+          <div className="p-3 border-b">
+            <h3 className="text-sm font-semibold text-muted-foreground px-3">Settings</h3>
+          </div>
+          <SidebarContent activeTab={activeTab} onTabChange={onTabChange} />
+        </ScrollArea>
+      </aside>
+
+      {/* Mobile Sheet */}
+      <div className="md:hidden mb-4">
+        <Sheet open={open} onOpenChange={setOpen}>
+          <SheetTrigger asChild>
+            <Button variant="outline" className="w-full justify-start gap-2">
+              <Menu className="w-4 h-4" />
+              {sidebarItems.find(i => i.id === activeTab)?.label || "Settings"}
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="w-[280px] p-0">
+            <SheetHeader className="p-4 border-b">
+              <SheetTitle>Settings</SheetTitle>
+            </SheetHeader>
+            <ScrollArea className="h-[calc(100vh-5rem)]">
+              <SidebarContent
+                activeTab={activeTab}
+                onTabChange={onTabChange}
+                onItemClick={() => setOpen(false)}
+              />
+            </ScrollArea>
+          </SheetContent>
+        </Sheet>
       </div>
-    </aside>
+    </>
   );
 }
