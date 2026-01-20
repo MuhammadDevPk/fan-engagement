@@ -233,6 +233,25 @@ export function AttendeesTable({ data, onSelectAttendee }: AttendeesTableProps) 
         </Table>
       </div>
 
+       {data.length === 0 && (
+         <div className="flex flex-col items-center justify-center py-16 px-4 border border-white/10 rounded-2xl bg-white/[0.02] mt-4 border-dashed">
+             <div className="h-16 w-16 bg-gray-500/10 rounded-full flex items-center justify-center mb-4">
+                 <div className="h-8 w-8 text-gray-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                    </svg>
+                 </div>
+             </div>
+             <h3 className="text-lg font-medium text-white mb-1">No attendees found</h3>
+             <p className="text-gray-400 text-center max-w-sm mb-6">
+                 We couldn't find any attendees matching your current filters. Try adjusting your search or filters.
+             </p>
+             <Button variant="outline" className="border-white/10 text-gray-300 hover:text-white" onClick={() => window.location.reload()}>
+                 Clear Filters
+             </Button>
+         </div>
+       )}
+
        {/* Bulk Actions Bar - Sticky Bottom */}
        {selectedIds.length > 0 && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-3xl bg-[#0A0E27] border border-white/20 shadow-2xl rounded-xl p-3 flex items-center justify-between z-50 animate-in slide-in-from-bottom-6">

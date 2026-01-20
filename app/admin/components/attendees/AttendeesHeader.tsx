@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button";
 interface AttendeesHeaderProps {
   totalAttendees: number;
   onManualAdd: () => void;
+  onImportCSV: () => void;
 }
 
-export function AttendeesHeader({ totalAttendees, onManualAdd }: AttendeesHeaderProps) {
+export function AttendeesHeader({ totalAttendees, onManualAdd, onImportCSV }: AttendeesHeaderProps) {
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -20,7 +21,11 @@ export function AttendeesHeader({ totalAttendees, onManualAdd }: AttendeesHeader
         </div>
         
         <div className="flex flex-wrap items-center gap-3">
-            <Button variant="outline" className="border-white/10 bg-white/5 text-gray-300 hover:bg-white/10 hover:text-white">
+            <Button 
+                variant="outline" 
+                className="border-white/10 bg-white/5 text-gray-300 hover:bg-white/10 hover:text-white"
+                onClick={onImportCSV}
+            >
                 <Download className="mr-2 h-4 w-4" />
                 Import CSV
             </Button>
