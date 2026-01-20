@@ -1,37 +1,48 @@
 "use client"
 
-import AnalyticsHeader from "./components/analytics/AnalyticsHeader"
-import MetricsCards from "./components/analytics/MetricsCards"
-import RevenueChart from "./components/analytics/RevenueChart"
-import AudienceInsights from "./components/analytics/AudienceInsights"
-import { motion } from "framer-motion"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import AnalyticsOverview from "./components/AnalyticsOverview"
+import CreateEventForm from "./components/CreateEventForm"
 
 export default function AdminDashboard() {
   return (
-    <div className="space-y-6 pb-20">
-      <AnalyticsHeader />
-
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <MetricsCards />
-        
-        <div className="grid grid-cols-12 gap-6 mb-6">
-           <RevenueChart />
-           {/* Placeholder for Event Performance Comparison or other widgets later */}
-           <div className="col-span-12 lg:col-span-4 bg-eureka-card border-eureka-card backdrop-blur-md bg-white/5 border-white/10 rounded-xl p-6 min-h-[300px]">
-                <h3 className="text-xl font-bold text-white mb-2">Event Performance</h3>
-                <p className="text-sm text-gray-400 mb-6">Top performing events by revenue</p>
-                <div className="flex items-center justify-center h-[200px] text-gray-500 text-sm border-2 border-dashed border-white/10 rounded-lg">
-                    Comparison Chart Coming Soon
-                </div>
-           </div>
+    <div className="space-y-6">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-white mb-2">Admin Dashboard</h1>
+          <p className="text-gray-400">Welcome back, Admin</p>
         </div>
+      </div>
 
-        <AudienceInsights />
-      </motion.div>
+      {/* Stats Grid */}
+      <AnalyticsOverview />
+      
+      {/* Create Event Form */}
+      <CreateEventForm />
+
+      {/* Recent Activity Section Placeholder */}
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
+        <Card className="col-span-4 bg-card border-border">
+          <CardHeader>
+            <CardTitle className="text-white">Revenue Overview</CardTitle>
+          </CardHeader>
+          <CardContent className="pl-2">
+            <div className="h-[200px] flex items-center justify-center text-gray-500">
+              Chart Placeholder
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="col-span-3 bg-card border-border">
+          <CardHeader>
+            <CardTitle className="text-white">Recent Sales</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="h-[200px] flex items-center justify-center text-gray-500">
+              List Placeholder
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }
