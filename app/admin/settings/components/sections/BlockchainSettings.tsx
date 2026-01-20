@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
-import { AlertCircle, CheckCircle2, Cloud, Database, Network, Plus, Zap } from "lucide-react";
+import { AlertCircle, CheckCircle2, Cloud, Database, Network, Plus, Zap, Blocks } from "lucide-react";
 
 export function BlockchainSettings() {
   const [networks, setNetworks] = useState({
