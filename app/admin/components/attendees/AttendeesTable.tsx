@@ -196,11 +196,16 @@ export function AttendeesTable({ data, onSelectAttendee }: AttendeesTableProps) 
                   </TableCell>
 
                   <TableCell className="text-right pr-4">
-                    <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="flex items-center justify-end gap-1 opacity-100 transition-opacity">
                         <Button size="icon" variant="ghost" className="h-8 w-8 text-gray-400 hover:text-white hover:bg-white/10" onClick={() => onSelectAttendee(attendee)}>
                             <Eye className="h-4 w-4" />
                         </Button>
-                        <Button size="icon" variant="ghost" className="h-8 w-8 text-gray-400 hover:text-white hover:bg-white/10">
+                        <Button 
+                            size="icon" 
+                            variant="ghost" 
+                            className="h-8 w-8 text-gray-400 hover:text-white hover:bg-white/10"
+                            onClick={() => alert(`Opening email composer for ${attendee.email || attendee.name}`)}
+                        >
                             <Mail className="h-4 w-4" />
                         </Button>
                         
@@ -212,14 +217,23 @@ export function AttendeesTable({ data, onSelectAttendee }: AttendeesTableProps) 
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="w-48 bg-[#0A0E27] border-white/10 text-gray-200">
                                 <DropdownMenuLabel>Manage Attendee</DropdownMenuLabel>
-                                <DropdownMenuItem className="focus:bg-white/5 cursor-pointer">
+                                <DropdownMenuItem 
+                                    className="focus:bg-white/5 cursor-pointer"
+                                    onClick={() => alert(`Resending ticket to ${attendee.email || attendee.name}`)}
+                                >
                                     <TicketIcon className="mr-2 h-4 w-4" /> Resend Ticket
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className="focus:bg-white/5 cursor-pointer">
+                                <DropdownMenuItem 
+                                    className="focus:bg-white/5 cursor-pointer"
+                                    onClick={() => window.open(`https://etherscan.io/address/${attendee.walletAddress}`, '_blank')}
+                                >
                                     <ExternalLink className="mr-2 h-4 w-4" /> View Transaction
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator className="bg-white/10" />
-                                <DropdownMenuItem className="text-red-400 focus:bg-red-500/10 focus:text-red-400 cursor-pointer">
+                                <DropdownMenuItem 
+                                    className="text-red-400 focus:bg-red-500/10 focus:text-red-400 cursor-pointer"
+                                    onClick={() => alert(`Blocked user: ${attendee.name}`)}
+                                >
                                     <Ban className="mr-2 h-4 w-4" /> Block User
                                 </DropdownMenuItem>
                             </DropdownMenuContent>

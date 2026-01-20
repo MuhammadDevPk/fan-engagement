@@ -19,7 +19,26 @@ interface ManualAddAttendeeModalProps {
 }
 
 export function ManualAddAttendeeModal({ isOpen, onClose, onAdd }: ManualAddAttendeeModalProps) {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    walletAddress: '',
+    ticketType: ''
+  });
+
   if (!isOpen) return null;
+
+  const handleSubmit = () => {
+    onAdd(formData);
+    onClose();
+    // Reset form
+    setFormData({
+        name: '',
+        email: '',
+        walletAddress: '',
+        ticketType: ''
+    });
+  };
 
   return (
     <>
@@ -37,7 +56,12 @@ export function ManualAddAttendeeModal({ isOpen, onClose, onAdd }: ManualAddAtte
             <Label className="text-gray-400">Full Name</Label>
             <div className="relative">
               <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
-              <Input placeholder="John Doe" className="pl-9 bg-[#0A0E27] border-white/10 text-white" />
+              <Input 
+                placeholder="John Doe" 
+                className="pl-9 bg-[#0A0E27] border-white/10 text-white" 
+                value={formData.name}
+                onChange={(e) => setFormData({...formData, name: e.target.value})}
+              />
             </div>
           </div>
 
@@ -45,7 +69,12 @@ export function ManualAddAttendeeModal({ isOpen, onClose, onAdd }: ManualAddAtte
             <Label className="text-gray-400">Email Address</Label>
              <div className="relative">
               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
-              <Input placeholder="john@example.com" className="pl-9 bg-[#0A0E27] border-white/10 text-white" />
+              <Input 
+                placeholder="john@example.com" 
+                className="pl-9 bg-[#0A0E27] border-white/10 text-white" 
+                value={formData.email}
+                onChange={(e) => setFormData({...formData, email: e.target.value})}
+            />
             </div>
           </div>
 
@@ -53,13 +82,18 @@ export function ManualAddAttendeeModal({ isOpen, onClose, onAdd }: ManualAddAtte
             <Label className="text-gray-400">Wallet Address (Optional)</Label>
              <div className="relative">
               <Wallet className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
-              <Input placeholder="0x..." className="pl-9 bg-[#0A0E27] border-white/10 text-white" />
+              <Input 
+                placeholder="0x..." 
+                className="pl-9 bg-[#0A0E27] border-white/10 text-white" 
+                value={formData.walletAddress}
+                onChange={(e) => setFormData({...formData, walletAddress: e.target.value})}
+            />
             </div>
           </div>
 
           <div className="space-y-2">
              <Label className="text-gray-400">Ticket Type</Label>
-             <Select>
+             <Select onValueChange={(val) => setFormData({...formData, ticketType: val})}>
                 <SelectTrigger className="bg-[#0A0E27] border-white/10 text-gray-300">
                     <SelectValue placeholder="Select ticket type" />
                 </SelectTrigger>
@@ -84,7 +118,7 @@ export function ManualAddAttendeeModal({ isOpen, onClose, onAdd }: ManualAddAtte
 
         <div className="flex gap-3 mt-6">
           <Button variant="outline" className="flex-1 border-white/10 text-gray-300 hover:text-white hover:bg-white/5" onClick={onClose}>Cancel</Button>
-          <Button className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white" onClick={() => { onAdd({}); onClose(); }}>Add Attendee</Button>
+          <Button className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white" onClick={handleSubmit}>Add Attendee</Button>
         </div>
       </div>
     </>

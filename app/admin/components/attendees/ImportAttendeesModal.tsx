@@ -64,7 +64,7 @@ export function ImportAttendeesModal({ isOpen, onClose, onImport }: ImportAttend
         {!isCompleted ? (
             <div className="space-y-6">
                 <div 
-                    className={`border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center text-center transition-colors ${
+                    className={`relative border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center text-center transition-colors ${
                         file ? 'border-indigo-500/50 bg-indigo-500/5' : 'border-white/10 hover:border-white/20 hover:bg-white/5'
                     }`}
                 >
@@ -73,7 +73,10 @@ export function ImportAttendeesModal({ isOpen, onClose, onImport }: ImportAttend
                             <FileText className="h-10 w-10 text-indigo-400 mb-3" />
                             <p className="text-white font-medium mb-1">{file.name}</p>
                             <p className="text-xs text-gray-400">{(file.size / 1024).toFixed(2)} KB</p>
-                            <Button variant="ghost" size="sm" className="mt-3 text-red-400 hover:text-red-300 hover:bg-red-500/10" onClick={() => setFile(null)}>
+                            <Button variant="ghost" size="sm" className="mt-3 text-red-400 hover:text-red-300 hover:bg-red-500/10" onClick={(e) => {
+                                e.stopPropagation();
+                                setFile(null);
+                            }}>
                                 Remove File
                             </Button>
                         </>
@@ -84,7 +87,7 @@ export function ImportAttendeesModal({ isOpen, onClose, onImport }: ImportAttend
                             <p className="text-xs text-gray-500">CSV, Excel or JSON (max 5MB)</p>
                             <input 
                                 type="file" 
-                                className="absolute inset-0 opacity-0 cursor-pointer" 
+                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" 
                                 accept=".csv,.xlsx,.json"
                                 onChange={handleFileChange}
                             />
