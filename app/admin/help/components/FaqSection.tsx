@@ -3,7 +3,7 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Search, ThumbsUp, ThumbsDown, PlayCircle, FileText } from "lucide-react"
+import { Search, ThumbsUp, ThumbsDown, PlayCircle, FileText, Eye, ArrowRight } from "lucide-react"
 
 export function FaqSection() {
   const faqs = [
