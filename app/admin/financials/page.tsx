@@ -2,12 +2,40 @@
 
 import { Button } from "@/components/ui/button"
 import { RefreshCw, Download, FileText } from "lucide-react"
+import { toast } from "sonner"
 import { FinancialOverviewCards } from "../components/financials/FinancialOverviewCards"
 import { RevenueChart } from "../components/financials/RevenueChart"
 import { PaymentMethodsBreakdown } from "../components/financials/PaymentMethodsBreakdown"
 import { TransactionsTable } from "../components/financials/TransactionsTable"
 
 export default function FinancialsPage() {
+  const handleViewTaxDocs = () => {
+    toast.info("Opening Tax Documents", {
+      description: "Loading your 2025/2026 tax documentation..."
+    });
+  };
+
+  const handleExportFinancials = () => {
+    toast.success("Export Started", {
+      description: "Your financial report is being generated as PDF...",
+      action: {
+        label: "Cancel",
+        onClick: () => toast.dismiss()
+      }
+    });
+  };
+
+  const handleRequestPayout = () => {
+    toast.promise(
+      new Promise((resolve) => setTimeout(resolve, 2000)),
+      {
+        loading: "Processing payout request...",
+        success: "Payout request submitted! Funds will arrive in 2-3 business days.",
+        error: "Failed to process payout request."
+      }
+    );
+  };
+
   return (
     <div className="p-6 space-y-6 pb-20">
       {/* Header Section */}
@@ -22,15 +50,26 @@ export default function FinancialsPage() {
         </div>
         
         <div className="flex items-center gap-3">
-            <Button variant="outline" className="bg-white/5 border-white/10 hover:bg-white/10 text-gray-300 gap-2">
+            <Button 
+              variant="outline" 
+              className="bg-white/5 border-white/10 hover:bg-white/10 text-gray-300 gap-2"
+              onClick={handleViewTaxDocs}
+            >
                 <FileText className="w-4 h-4" />
                 View Tax Docs
             </Button>
-            <Button variant="outline" className="bg-white/5 border-white/10 hover:bg-white/10 text-gray-300 gap-2">
+            <Button 
+              variant="outline" 
+              className="bg-white/5 border-white/10 hover:bg-white/10 text-gray-300 gap-2"
+              onClick={handleExportFinancials}
+            >
                 <Download className="w-4 h-4" />
                 Export Financials
             </Button>
-            <Button className="bg-brand-primary hover:bg-brand-primary/90 text-white shadow-lg shadow-brand-primary/20">
+            <Button 
+              className="bg-brand-primary hover:bg-brand-primary/90 text-white shadow-lg shadow-brand-primary/20"
+              onClick={handleRequestPayout}
+            >
                 Request Payout
             </Button>
         </div>
@@ -40,8 +79,6 @@ export default function FinancialsPage() {
       <FinancialOverviewCards />
 
       {/* Analytics Section */}
-      {/* We use a grid here or stack them. RevenueChart inside expects column span, so we might want to wrap it or override its class */}
-      {/* For this layout, we'll let RevenueChart take full width for clarity, and put Payment Breakdown below */}
       <div className="grid grid-cols-12 gap-6">
          <div className="col-span-12">
              <RevenueChart />
@@ -57,3 +94,4 @@ export default function FinancialsPage() {
     </div>
   )
 }
+

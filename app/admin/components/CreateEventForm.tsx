@@ -5,7 +5,8 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Card } from "@/components/ui/card"
-import { Plus, X, ArrowRight, ArrowLeft, Send, CheckCircle2 } from "lucide-react"
+import { Plus, X, ArrowRight, ArrowLeft, Send, CheckCircle2, Save } from "lucide-react"
+import { toast } from "sonner"
 
 import { EventFormData, initialEventData } from "./create-event/types"
 import Step1BasicInfo from "./create-event/Step1BasicInfo"
@@ -57,6 +58,16 @@ export default function CreateEventForm() {
      setCurrentStep(1);
      setIsSuccess(false);
      setIsOpen(false);
+  };
+
+  const handleSaveDraft = () => {
+    toast.success("Draft saved!", {
+      description: `"${formData.name || 'Untitled Event'}" has been saved as a draft.`,
+      action: {
+        label: "View Drafts",
+        onClick: () => console.log("Navigate to drafts")
+      }
+    });
   };
 
   if (isSuccess) {
@@ -163,7 +174,12 @@ export default function CreateEventForm() {
           </Button>
 
           <div className="flex gap-3">
-            <Button variant="outline" className="hidden sm:flex border-purple-500/20 text-purple-400 hover:bg-purple-500/10">
+            <Button 
+              variant="outline" 
+              className="hidden sm:flex border-purple-500/20 text-purple-400 hover:bg-purple-500/10"
+              onClick={handleSaveDraft}
+            >
+              <Save className="mr-2 h-4 w-4" />
               Save Draft
             </Button>
             <Button 

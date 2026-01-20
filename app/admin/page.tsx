@@ -3,6 +3,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import AnalyticsOverview from "./components/AnalyticsOverview"
 import CreateEventForm from "./components/CreateEventForm"
+import { RevenueOverviewChart } from "./components/dashboard/RevenueOverviewChart"
+import { RecentSalesList } from "./components/dashboard/RecentSalesList"
 
 export default function AdminDashboard() {
   return (
@@ -20,16 +22,14 @@ export default function AdminDashboard() {
       {/* Create Event Form */}
       <CreateEventForm />
 
-      {/* Recent Activity Section Placeholder */}
+      {/* Charts Section */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
         <Card className="col-span-4 bg-card border-border">
           <CardHeader>
             <CardTitle className="text-white">Revenue Overview</CardTitle>
           </CardHeader>
           <CardContent className="pl-2">
-            <div className="h-[200px] flex items-center justify-center text-gray-500">
-              Chart Placeholder
-            </div>
+            <RevenueOverviewChart />
           </CardContent>
         </Card>
         <Card className="col-span-3 bg-card border-border">
@@ -37,12 +37,11 @@ export default function AdminDashboard() {
             <CardTitle className="text-white">Recent Sales</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-[200px] flex items-center justify-center text-gray-500">
-              List Placeholder
-            </div>
+            <RecentSalesList />
           </CardContent>
         </Card>
       </div>
     </div>
   )
 }
+

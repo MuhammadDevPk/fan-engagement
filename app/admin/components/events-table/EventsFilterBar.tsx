@@ -1,3 +1,5 @@
+"use client"
+
 import React from 'react';
 import { Search, LayoutGrid, List, Download, Calendar, Filter } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -9,8 +11,36 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from "sonner";
 
-export function EventsFilterBar() {
+interface EventsFilterBarProps {
+  searchQuery: string;
+  onSearchChange: (query: string) => void;
+  statusFilter: string;
+  onStatusChange: (status: string) => void;
+  categoryFilter: string;
+  onCategoryChange: (category: string) => void;
+  totalEvents: number;
+  filteredCount: number;
+}
+
+export function EventsFilterBar({
+  searchQuery,
+  onSearchChange,
+  statusFilter,
+  onStatusChange,
+  categoryFilter,
+  onCategoryChange,
+  totalEvents,
+  filteredCount
+}: EventsFilterBarProps) {
+  
+  const handleExport = () => {
+    toast.success("Export started", {
+      description: "Your events CSV is being generated..."
+    });
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -18,7 +48,7 @@ export function EventsFilterBar() {
           <span>📋</span> All Events
         </h2>
         <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-400">Showing 1-10 of 24 events</span>
+            <span className="text-sm text-gray-400">Showing {filteredCount} of {totalEvents} events</span>
         </div>
       </div>
 
@@ -28,13 +58,15 @@ export function EventsFilterBar() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
           <Input 
             placeholder="Search events..." 
+            value={searchQuery}
+            onChange={(e) => onSearchChange(e.target.value)}
             className="pl-9 bg-[#0A0E27] border-white/10 text-white placeholder:text-gray-500 focus-visible:ring-indigo-500/50"
           />
         </div>
 
         {/* Filters */}
         <div className="flex flex-wrap items-center gap-2">
-          <Select defaultValue="all">
+          <Select value={statusFilter} onValueChange={onStatusChange}>
             <SelectTrigger className="w-[130px] bg-[#0A0E27] border-white/10 text-gray-300">
               <div className="flex items-center gap-2">
                 <Filter className="h-3.5 w-3.5" />
@@ -43,10 +75,11 @@ export function EventsFilterBar() {
             </SelectTrigger>
             <SelectContent className="bg-[#0A0E27] border-white/10 text-gray-300">
               <SelectItem value="all">All Status</SelectItem>
-              <SelectItem value="live">Live</SelectItem>
-              <SelectItem value="upcoming">Upcoming</SelectItem>
-              <SelectItem value="ended">Ended</SelectItem>
-              <SelectItem value="draft">Draft</SelectItem>
+              <SelectItem value="Live">Live</SelectItem>
+              <SelectItem value="Upcoming">Upcoming</SelectItem>
+              <SelectItem value="Ended">Ended</SelectItem>
+              <SelectItem value="Draft">Draft</SelectItem>
+              <SelectItem value="Sold Out">Sold Out</SelectItem>
             </SelectContent>
           </Select>
 
@@ -64,15 +97,19 @@ export function EventsFilterBar() {
             </SelectContent>
           </Select>
 
-          <Select defaultValue="all_cat">
+          <Select value={categoryFilter} onValueChange={onCategoryChange}>
             <SelectTrigger className="w-[140px] bg-[#0A0E27] border-white/10 text-gray-300">
               <SelectValue placeholder="Category" />
             </SelectTrigger>
             <SelectContent className="bg-[#0A0E27] border-white/10 text-gray-300">
-              <SelectItem value="all_cat">All Categories</SelectItem>
-              <SelectItem value="music">Music</SelectItem>
-              <SelectItem value="tech">Tech</SelectItem>
-              <SelectItem value="sports">Sports</SelectItem>
+              <SelectItem value="all">All Categories</SelectItem>
+              <SelectItem value="Music">Music</SelectItem>
+              <SelectItem value="Tech">Tech</SelectItem>
+              <SelectItem value="Sports">Sports</SelectItem>
+              <SelectItem value="Art">Art</SelectItem>
+              <SelectItem value="Education">Education</SelectItem>
+              <SelectItem value="Gaming">Gaming</SelectItem>
+              <SelectItem value="Social">Social</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -88,7 +125,11 @@ export function EventsFilterBar() {
             </Button>
           </div>
           
-          <Button variant="outline" className="h-9 border-white/10 bg-transparent text-gray-300 hover:bg-white/5 hover:text-white">
+          <Button 
+            variant="outline" 
+            className="h-9 border-white/10 bg-transparent text-gray-300 hover:bg-white/5 hover:text-white"
+            onClick={handleExport}
+          >
             <Download className="mr-2 h-4 w-4" />
             Export CSV
           </Button>
@@ -97,3 +138,4 @@ export function EventsFilterBar() {
     </div>
   );
 }
+

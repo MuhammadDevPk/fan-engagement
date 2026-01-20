@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { ArrowUpDown, Eye, Pen, BarChart3, Trash2 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Progress } from "@/components/ui/progress";
@@ -27,12 +27,36 @@ import { MobileEventCard } from './MobileEventCard';
 export default function EventsTable() {
   const [selectedEvents, setSelectedEvents] = useState<string[]>([]);
   const [analyticsEvent, setAnalyticsEvent] = useState<Event | null>(null);
+  
+  // Filter states
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [categoryFilter, setCategoryFilter] = useState('all');
+
+  // Filtered data with memoization
+  const filteredEvents = useMemo(() => {
+    return eventsData.filter(event => {
+      // Search filter
+      const matchesSearch = searchQuery === '' || 
+        event.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        event.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        event.category.toLowerCase().includes(searchQuery.toLowerCase());
+      
+      // Status filter
+      const matchesStatus = statusFilter === 'all' || event.status === statusFilter;
+      
+      // Category filter  
+      const matchesCategory = categoryFilter === 'all' || event.category === categoryFilter;
+      
+      return matchesSearch && matchesStatus && matchesCategory;
+    });
+  }, [searchQuery, statusFilter, categoryFilter]);
 
   const toggleSelectAll = () => {
-    if (selectedEvents.length === eventsData.length) {
+    if (selectedEvents.length === filteredEvents.length) {
       setSelectedEvents([]);
     } else {
-      setSelectedEvents(eventsData.map(e => e.id));
+      setSelectedEvents(filteredEvents.map(e => e.id));
     }
   };
 
@@ -67,7 +91,16 @@ export default function EventsTable() {
 
   return (
     <div className="space-y-4">
-      <EventsFilterBar />
+      <EventsFilterBar 
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        statusFilter={statusFilter}
+        onStatusChange={setStatusFilter}
+        categoryFilter={categoryFilter}
+        onCategoryChange={setCategoryFilter}
+        totalEvents={eventsData.length}
+        filteredCount={filteredEvents.length}
+      />
 
       {/* --- DESKTOP TABLE VIEW --- */}
       <div className="hidden md:block rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-sm overflow-hidden">
@@ -76,7 +109,7 @@ export default function EventsTable() {
             <TableRow className="hover:bg-transparent border-white/10">
               <TableHead className="w-[40px] pl-4">
                 <Checkbox 
-                  checked={selectedEvents.length === eventsData.length && eventsData.length > 0}
+                  checked={selectedEvents.length === filteredEvents.length && filteredEvents.length > 0}
                   onCheckedChange={toggleSelectAll}
                   className="border-white/20 data-[state=checked]:bg-indigo-500 data-[state=checked]:border-indigo-500"
                 />
@@ -118,7 +151,7 @@ export default function EventsTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {eventsData.map((event) => {
+            {filteredEvents.map((event) => {
               const salesPercentage = Math.round((event.ticketsSold / event.ticketsTotal) * 100);
               const isSelected = selectedEvents.includes(event.id);
 
@@ -229,7 +262,7 @@ export default function EventsTable() {
 
       {/* --- MOBILE CARD LIST VIEW --- */}
       <div className="md:hidden space-y-4">
-          {eventsData.map((event) => (
+          {filteredEvents.map((event) => (
              <MobileEventCard key={event.id} event={event} onAnalyticsClick={setAnalyticsEvent} />
           ))}
           <TablePagination />
