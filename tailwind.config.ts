@@ -53,6 +53,20 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        brand: {
+          primary: "#8b5cf6", // violet-500
+          secondary: "#3b82f6", // blue-500
+          start: "#8b5cf6", 
+          end: "#3b82f6",
+          text: {
+            accent: "#a78bfa"
+          }
+        },
+        eureka: {
+          bg: "#0f0e17", // Very dark purple/black
+          card: "rgba(255, 255, 255, 0.03)",
+          dark: "#0f0e17"
+        }
       },
       borderRadius: {
         lg: "var(--radius)",
