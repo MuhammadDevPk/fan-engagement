@@ -512,3 +512,190 @@ Comprehensive enhancement of the Events Data Table module with full interactivit
 - [x] Empty state displays correctly
 - [x] Mobile cards expand/collapse
 - [x] No console errors
+
+---
+
+## Module 5: Event Analytics Detail View - Complete Enhancement
+
+> **Date**: January 21, 2026  
+> **Status**: ✅ Complete
+
+### Overview
+
+Comprehensive slide-in analytics panel for detailed event performance metrics. Accessible via the Analytics icon (bar chart) on each event row in the Events Table.
+
+### Analysis Summary
+
+**✅ What Worked Well (Before Enhancement):**
+
+- Base slide-in panel structure using Sheet component
+- Header with event thumbnail, name, date, status
+- Quick stats bar (Sold, Revenue, Conversion)
+- Tabs navigation (Overview, Audience, Blockchain, Revenue)
+- Basic Recharts integration for area charts
+- Copy to clipboard functionality via Sonner toast
+
+**❌ What Was Missing/Broken:**
+
+| Issue                 | Description                                          |
+| --------------------- | ---------------------------------------------------- |
+| Time Range Selector   | 7D/30D/All buttons were non-functional (visual only) |
+| Wallet Distribution   | Missing from Audience tab per requirements           |
+| Transaction Status    | No confirmed/pending indicators                      |
+| Block Explorer Links  | Missing external link functionality                  |
+| Stacked Revenue Chart | Had bar chart instead of stacked area chart          |
+| Financial Summary     | Missing Gross/Net/Fees/Pending breakdown             |
+| Withdraw Button       | Not implemented                                      |
+| Export Buttons        | Missing for all chart sections                       |
+| More Transaction Data | Only 4 transactions, needed more variety             |
+
+**🔧 What Was Fixed/Implemented:**
+
+### Features Added
+
+#### 1. Functional Time Range Selector (Tab 1)
+
+- State-managed toggle between 7D, 30D, All Time
+- Different mock data sets for each range
+- Smooth chart data transitions
+
+#### 2. Wallet Type Distribution (Tab 2)
+
+- MetaMask: 65% 🦊
+- WalletConnect: 25% 🔗
+- Coinbase Wallet: 10% 🔵
+- Color-coded cards with icons
+
+#### 3. Enhanced Transaction Feed (Tab 3)
+
+- 6 detailed transactions with varied types (Minted, Transferred, Checked-in)
+- Status indicators: ✓ Confirmed (green) / ⟳ Pending (amber animated)
+- Wallet address display (truncated)
+- Block number display
+- Copy hash button
+- Block explorer link button (with toast feedback)
+
+#### 4. Smart Contract Details (Tab 3)
+
+- Contract address with copy/explore buttons
+- Network badge (Polygon)
+- Token Standard (ERC-721)
+- Total Gas Spent calculation
+- Average Gas per Transaction
+- "View on Polygonscan" button
+
+#### 5. Stacked Revenue Chart (Tab 4)
+
+- Stacked Area Chart with 3 layers:
+  - Primary Sales (gradient purple)
+  - Secondary Royalties (gradient blue)
+  - Platform Fees (gradient red)
+- Legend with color indicators
+- Custom tooltip formatter
+
+#### 6. Financial Summary Cards (Tab 4)
+
+- **Gross Revenue**: Total earnings
+- **Platform Fees (10%)**: Calculated deduction (red)
+- **Net Revenue**: After fees (green gradient)
+- **Pending Withdrawals**: 30% of net (amber gradient)
+
+#### 7. Withdraw to Wallet Button (Tab 4)
+
+- Gradient purple/indigo styling
+- Loading state with spinner
+- Toast notification with success message
+- Disabled when pending = 0
+
+#### 8. Export Buttons
+
+Added to all chart sections:
+
+- Sales Velocity chart
+- Ticket Tier Performance
+- Demographics
+- Geographic Distribution
+- Transactions
+- Revenue Chart
+
+Each exports with promise toast (loading → success).
+
+### Files Modified
+
+| File                      | Changes                            |
+| ------------------------- | ---------------------------------- |
+| `EventAnalyticsPanel.tsx` | Complete rewrite with all features |
+
+### Mock Data Added
+
+```typescript
+// Time range data (3 sets)
+salesData7D:  7 daily entries
+salesData30D: 4 weekly aggregates
+salesDataAll: 6 monthly entries
+
+// Wallet distribution
+walletTypeData: 3 wallet types with percentages
+
+// Blockchain transactions
+blockchainTransactions: 6 transactions with:
+  - Full hash, type, wallet, amount, time
+  - Status (confirmed/pending)
+  - Block number
+
+// Revenue stacked data
+revenueStackedData: 7 entries with primary/royalties/fees
+```
+
+### Design Compliance
+
+| Requirement                              | Status |
+| ---------------------------------------- | ------ |
+| 600px width slide-in                     | ✅     |
+| Semi-transparent backdrop with blur      | ✅     |
+| Close button (X) top-right               | ✅     |
+| Event thumbnail + name header            | ✅     |
+| Quick stats bar                          | ✅     |
+| 4-tab navigation                         | ✅     |
+| Sales Over Time line chart               | ✅     |
+| Time range selector (7D/30D/All)         | ✅     |
+| Gradient fill under line                 | ✅     |
+| Hover tooltip with numbers               | ✅     |
+| Ticket Tier horizontal bars              | ✅     |
+| VIP gold, General blue, Early Bird green | ✅     |
+| Metrics Grid (peak hour, avg time, etc)  | ✅     |
+| Demographics donut chart                 | ✅     |
+| Center shows total attendees             | ✅     |
+| Top 5 cities with country flags          | ✅     |
+| Wallet Type Distribution                 | ✅     |
+| Transaction feed with status             | ✅     |
+| Tx hash (truncated, copyable)            | ✅     |
+| Block explorer link                      | ✅     |
+| Smart contract info section              | ✅     |
+| Stacked area revenue chart               | ✅     |
+| Financial summary cards                  | ✅     |
+| Withdraw to Wallet button                | ✅     |
+| Export buttons per chart                 | ✅     |
+| Dark panel rgba(10,14,39,0.98)           | ✅     |
+| Smooth tab transitions                   | ✅     |
+
+### Testing Checklist
+
+- [x] Panel opens from Analytics icon in table
+- [x] Slide-in animation smooth
+- [x] Header displays correct event data
+- [x] Time range toggles update chart data
+- [x] All 4 tabs accessible and populated
+- [x] Donut chart shows center label
+- [x] Geographic bars render with flags
+- [x] Wallet type cards display correctly
+- [x] Transaction status indicators show
+- [x] Copy hash to clipboard works
+- [x] Block explorer button shows toast
+- [x] Stacked chart renders 3 layers
+- [x] Financial cards calculate correctly
+- [x] Withdraw button shows loading state
+- [x] Export buttons trigger toast
+- [x] Close button dismisses panel
+- [x] Mobile responsive layout
+- [x] No console errors
